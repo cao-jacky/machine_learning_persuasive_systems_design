@@ -1,9 +1,9 @@
+library(rpart)
 
 ##### FUNCTION TO GENERATE MULTIVARIATE DATA:
 # Function to generate data as in Wu et al. (2007) /
 # Pratola (2016):
 gen_Wu_data <- function(n=300, sigma=.25, seed=1){
-  
   #seed
   set.seed(seed)
   
@@ -56,9 +56,7 @@ plot(data$y, pred)
 # Create a model, with the smallest mean squared error:
 # THE MEAN SQUARED ERROR TO BEAT:
 mse <- sum((data$y-pred)^2)/300
-print(cat("MSE: ",mse))
-
-
+print(cat("MSE: ", mse))
 
 # Visualize the data set (well, sort off...)
 plot(data$x.1, data$y, type="p")
@@ -81,6 +79,24 @@ plot(data$x.3, data$y, type="p")
 # https://cran.r-project.org/web/packages/glmnet/index.html
 #
 # Feel free to explore more [R] packages for for example NN, DNN, BART, etc.
+
+# attempting logistic regression 
+
+m2 <- glm(y ~ x.1 + x.2 + x.3, data=data)
+pred <- predict(m2)
+
+mse <- sum((data$y-pred)^2)/300
+print(cat("MSE: ", mse))
+
+# CART
+
+m3 <- rpart(y ~ x.1 + x.2 + x.3, data=data)
+pred <- predict(m3)
+plot(data$y, pred)
+
+mse3 <- sum((data$y-pred)^2)/300
+print(cat("MSE: ", mse3))
+
 
 # If stuck, start with a much simpler data generating mechanism:
 n <- 100
